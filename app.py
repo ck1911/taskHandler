@@ -50,13 +50,16 @@ class Task(db.Model):
     created_date=db.Column(db.DateTime,default=datetime.now(),nullable=False)
     due_date=db.Column(db.DateTime)
     status=db.Column(db.String,default="In-Progress",nullable=False)
+    
+    new_due_date=db.Column(db.DateTime,nullable=True,default=None)
+    extension_status=db.Column(db.String,default=None,nullable=True)
+    
     user_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
     manager_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
     
     assigned_to=db.relationship("User",foreign_keys="Task.user_id")
     assigned_by=db.relationship("User",foreign_keys="Task.manager_id")
     
-    new_due_date=db.Column(db.DateTime)
     
     
     
@@ -171,7 +174,8 @@ def update_deadline_task(no):
     if request.method == "POST":
         form=request.form
         new_due_date=datetime.fromisoformat(form.get("due_date"))
-        tsk.new_due_date=new_due_date        
+        tsk.new_due_date=new_due_date  
+        tsk.extension_status="Requested"      
         db.session.commit()
         return redirect("/")
     return render_template("deadlineReq.html",tsk=tsk)
