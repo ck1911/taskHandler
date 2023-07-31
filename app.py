@@ -171,8 +171,7 @@ def update_deadline_task(no):
     if request.method == "POST":
         form=request.form
         new_due_date=datetime.fromisoformat(form.get("due_date"))
-        dr=DeadlineRequest(new_due_date=new_due_date,task_id=no)
-        db.session.add(dr)
+        tsk.new_due_date=new_due_date        
         db.session.commit()
         return redirect("/")
     return render_template("deadlineReq.html",tsk=tsk)
