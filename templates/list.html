@@ -6,11 +6,13 @@
   }
 </style>
 
-<div style="min-height: 90vh; padding: 30px 15% 10px 15%;" >
+<div style="min-height: 90vh; padding: 40px 15% 10px 15%;" >
   <div >
+    {% if current_user.isAdmin %}
     <a href="/add" class="btn btn-primary" style="float: right; margin: 0 0 10px 0;">
      + Add Task
     </a>
+    {% endif %}
     <div class="table-responsive">
       <table class="table table-hover table-nowrap" style="text-align: center;min-height: 150px;">
         <thead class="table-light">
@@ -59,12 +61,12 @@
             <td>{{tk.status}}</td>
             <td>
               {% if tk.status=="Complete" %}
-              <a href="/update/{{tk.task_no}}/1"
+              <a href="/update/{{tk.task_no}}/1" data-toggle="tooltip" data-placement="top" title="Mark as incomplete"
                 ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
               ></a>
               {% else %}
-              <a href="/update/{{tk.task_no}}/0"
-                ><i
+              <a href="/update/{{tk.task_no}}/0" data-toggle="tooltip" data-placement="top" title="Mark as complete"
+                ><i 
                   class="fa fa-check"
                   style="color: #18c54c; margin: 0 5px"
                 ></i
@@ -73,7 +75,7 @@
 
               <a href="/edit/{{tk.task_no}}"
                 ><i
-                  class="fas fa-edit"
+                  class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="Edit"
                   style="color: #3f4b42; margin: 0 5px"
                 ></i
               ></a>

@@ -51,7 +51,9 @@ class Task(db.Model):
     due_date=db.Column(db.DateTime)
     status=db.Column(db.String,default="In-Progress",nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
-
+    # manager_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
+    # assigned_to=db.relationship("User",foreign_keys="Task.user_id")
+    # assigned_by=db.relationship("User",foreign_keys="Task.manager_id")
     
     def __repr__(self):
         return 'Task Number - {0} || Task Name - {1}'.format(self.task_no,self.task)
