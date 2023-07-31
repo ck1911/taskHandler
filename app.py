@@ -228,6 +228,35 @@ def logout():
 
 
 
+@app.route("/approve/<int:task_id>")
+@login_required
+def approve(task_id):
+    
+    tsk = Task.query.get(task_id)
+    tsk.due_date = tsk.new_due_date
+    print(tsk.new_due_date)
+    tsk.new_due_date = None
+    tsk.extension_status = "Approved"
+    db.session.commit()
+
+    return redirect("/")
+
+
+
+@app.route("/decline/<int:task_id>")
+@login_required
+def decline(task_id):
+    tsk = Task.query.get(task_id)
+    tsk.new_due_date = None
+    tsk.extension_status = "Declined"
+    db.session.commit()
+    
+    return redirect("/")
+
+        
+        
+
+
 
 
 with app.app_context():

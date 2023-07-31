@@ -84,7 +84,11 @@
       </div>
       <div class="mb-8">
         <label class="form-label" for="email">New Deadline</label>
+        {% if tsk.new_due_date %}
         <input type="date" class="form-control" id="email" value="{{tsk.new_due_date.date()}}" name="due_date" />
+        {% else %}
+        <input type="date" class="form-control" id="email" name="due_date" />
+        {% endif %}
       </div>     
       <div>
         <button type="submit" class="btn btn-primary w-full">

@@ -26,6 +26,7 @@
             {% endif %}
             <th scope="col" style="color: black">Email</th>
             <th scope="col" style="color: black">Due Date</th>
+
             <th scope="col" style="color: black">
               <div class="dropdown" style="background-color: none;">
                 <button class="btn dropdown-toggle"  style="color: black" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -37,6 +38,8 @@
                 </div>
               </div>
             </th>
+            <th scope="col" style="color: black">Extension Request</th>
+
             <th scope="col" style="color: black">Actions</th>
           </tr>
         </thead>
@@ -70,9 +73,27 @@
               >
             </td>
             {% endif %}
-
+            {% if tk.due_date %}
             <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
+            {% endif %}
             <td>{{tk.status}}</td>
+            {% if current_user.isAdmin %}
+            
+
+            {% if tk.new_due_date %}
+              <td>
+                {{tk.new_due_date}}
+                <a href="/approve/{{tk.task_no}}" class="btn btn-primary">Approve</a>
+                <a href="/decline{{tk.task_no}}" class="btn btn-danger">Decline</a>
+              </td>
+            {% else %}
+              <td>No request</td>
+            {% endif %}
+            {% else %}
+            <td><p>{{ tk.extension_status }}</p></td>
+            {% endif %}
+
+            
             <td>
               {% if not current_user.isAdmin %}
 
@@ -112,61 +133,7 @@
           {%endfor %}
         </tbody>
       </table>
-      <!-- <table class="table" style="text-align: center">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">TASK</th>
-        {% if current_user.isAdmin %} 
-       
-        <th scope="col">Assigned To</th>
-        {% endif %}
-        <th scope="col">DUE DATE</th>
-        <th scope="col">STATUS</th>
-        <th scope="col">ACTIONS</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for tk in tsk %}
-      <tr>
-        <th scope="row">{{loop.index}}</th>
-        <td>{{tk.task}}</td>
-        {% if current_user.isAdmin %} 
-       
-        {% endif %}
-        <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
-        <td>{{tk.status}}</td>
-        <td>
-          {% if tk.status=="Complete" %}
-          <a href="/update/{{tk.task_no}}/1"
-            ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
-          ></a>
-          {% else %}
-          <a href="/update/{{tk.task_no}}/0"
-            ><i class="fa fa-check" style="color: #18c54c; margin: 0 5px"></i
-          ></a>
-          {% endif %}
-
-          <a href="/edit/{{tk.task_no}}"
-            ><i class="fas fa-edit" style="color: #3f4b42; margin: 0 5px"></i
-          ></a>
-          {% if current_user.isAdmin %} 
-       
-          <a href="/delete/{{tk.task_no}}"
-          ><i
-            class="fa-regular fa-trash-can"
-            style="color: #ff0f0f; margin: 0 5px"
-          ></i
-        ></a>
-        {% endif %}
-         
-        </td>
-      </tr>
-
-      {%endfor %}
-    </tbody>
-  </table> -->
-    </div>
+          </div>
   </div>
   
 </div>
