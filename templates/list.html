@@ -21,8 +21,10 @@
             <th scope="col" style="color: black">Task</th>
             {% if current_user.isAdmin %}
             <th scope="col" style="color: black">Assigned To</th>
-            <th scope="col" style="color: black">Email</th>
+            {% else %}
+            <th scope="col" style="color: black">Assigned By</th>
             {% endif %}
+            <th scope="col" style="color: black">Email</th>
             <th scope="col" style="color: black">Due Date</th>
             <th scope="col" style="color: black">
               <div class="dropdown" style="background-color: none;">
@@ -56,10 +58,24 @@
                 >{{tk.assigned_to.email}}</a
               >
             </td>
+            {% else %}
+            <td>
+             
+              {{tk.assigned_by.name}}
+            
+            </td>
+            <td>
+              <a class="text-current" href="mailto:{{tk.assigned_to.email}}"
+                >{{tk.assigned_by.email}}</a
+              >
+            </td>
             {% endif %}
+
             <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
             <td>{{tk.status}}</td>
             <td>
+              {% if not current_user.isAdmin %}
+
               {% if tk.status=="Complete" %}
               <a href="/update/{{tk.task_no}}/1" data-toggle="tooltip" data-placement="top" title="Mark as incomplete"
                 ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
@@ -73,14 +89,16 @@
               ></a>
               {% endif %}
 
+              {% endif %}
+
+              {% if current_user.isAdmin %}
               <a href="/edit/{{tk.task_no}}"
                 ><i
                   class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="Edit"
                   style="color: #3f4b42; margin: 0 5px"
                 ></i
               ></a>
-              {% if current_user.isAdmin %}
-
+              
               <a href="/delete/{{tk.task_no}}"
                 ><i
                   class="fa-regular fa-trash-can"
