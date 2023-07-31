@@ -82,9 +82,16 @@
 
             {% if tk.new_due_date %}
               <td>
-                {{tk.new_due_date}}
-                <a href="/approve/{{tk.task_no}}" class="btn btn-primary">Approve</a>
-                <a href="/decline{{tk.task_no}}" class="btn btn-danger">Decline</a>
+                {{tk.new_due_date.date().strftime("%d-%m-%Y")}}
+                <a href="/approve/{{tk.task_no}}" data-toggle="tooltip" data-placement="top" title="Approve"
+                ><i 
+                  class="fa fa-check"
+                  style="color: #18c54c; margin: 0 5px"
+                ></i
+              ></a>
+                <a href="/decline/{{tk.task_no}}" data-toggle="tooltip" data-placement="top" title="Decline"
+                ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
+              ></a>
               </td>
             {% else %}
               <td>No request</td>
