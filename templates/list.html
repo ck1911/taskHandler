@@ -1,0 +1,153 @@
+{% extends "base.html"%} {%block title%} My Task {%endblock%} {% block body%}
+
+<style>
+  .table td,.table th{
+    font-size: 14px !important;
+  }
+</style>
+
+<div style="min-height: 90vh; padding: 30px 15% 10px 15%;" >
+  <div >
+    <a href="/add" class="btn btn-primary" style="float: right; margin: 0 0 10px 0;">
+     + Add Task
+    </a>
+    <div class="table-responsive">
+      <table class="table table-hover table-nowrap" style="text-align: center;min-height: 150px;">
+        <thead class="table-light">
+          <tr>
+            <th scope="col" style="color: black">Sr No.</th>
+            <th scope="col" style="color: black">Task</th>
+            {% if current_user.isAdmin %}
+            <th scope="col" style="color: black">Assigned To</th>
+            <th scope="col" style="color: black">Email</th>
+            {% endif %}
+            <th scope="col" style="color: black">Due Date</th>
+            <th scope="col" style="color: black">
+              <div class="dropdown" style="background-color: none;">
+                <button class="btn dropdown-toggle"  style="color: black" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Status </button>
+                <div class="dropdown-menu" style="text-align: center;" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item nav-item nav-link " href="/show/0">All</a>
+                  <a class="dropdown-item nav-item nav-link " href="/show/1">Completed</a>
+                  <a class="dropdown-item nav-item nav-link " href="/show/2">In-Progress</a>
+                </div>
+              </div>
+            </th>
+            <th scope="col" style="color: black">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tk in tsk %}
+          <tr>
+            <td scope="row">{{loop.index}}</td>
+            <td>{{tk.task}}</td>
+
+            {% if current_user.isAdmin %}
+
+            <td>
+             
+                {{tk.user_data.name}}
+              
+            </td>
+            <td>
+              <a class="text-current" href="mailto:{{tk.user_data.email}}"
+                >{{tk.user_data.email}}</a
+              >
+            </td>
+            {% endif %}
+            <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
+            <td>{{tk.status}}</td>
+            <td>
+              {% if tk.status=="Complete" %}
+              <a href="/update/{{tk.task_no}}/1"
+                ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
+              ></a>
+              {% else %}
+              <a href="/update/{{tk.task_no}}/0"
+                ><i
+                  class="fa fa-check"
+                  style="color: #18c54c; margin: 0 5px"
+                ></i
+              ></a>
+              {% endif %}
+
+              <a href="/edit/{{tk.task_no}}"
+                ><i
+                  class="fas fa-edit"
+                  style="color: #3f4b42; margin: 0 5px"
+                ></i
+              ></a>
+              {% if current_user.isAdmin %}
+
+              <a href="/delete/{{tk.task_no}}"
+                ><i
+                  class="fa-regular fa-trash-can"
+                  style="color: #ff0f0f; margin: 0 5px"
+                ></i
+              ></a>
+              {% endif %}
+            </td>
+          </tr>
+          {%endfor %}
+        </tbody>
+      </table>
+      <!-- <table class="table" style="text-align: center">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">TASK</th>
+        {% if current_user.isAdmin %} 
+       
+        <th scope="col">Assigned To</th>
+        {% endif %}
+        <th scope="col">DUE DATE</th>
+        <th scope="col">STATUS</th>
+        <th scope="col">ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tk in tsk %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{tk.task}}</td>
+        {% if current_user.isAdmin %} 
+       
+        <td>{{tk.user_data.name}}</td>
+        {% endif %}
+        <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
+        <td>{{tk.status}}</td>
+        <td>
+          {% if tk.status=="Complete" %}
+          <a href="/update/{{tk.task_no}}/1"
+            ><i class="fa fa-times" style="color: red; margin: 0 5px"></i
+          ></a>
+          {% else %}
+          <a href="/update/{{tk.task_no}}/0"
+            ><i class="fa fa-check" style="color: #18c54c; margin: 0 5px"></i
+          ></a>
+          {% endif %}
+
+          <a href="/edit/{{tk.task_no}}"
+            ><i class="fas fa-edit" style="color: #3f4b42; margin: 0 5px"></i
+          ></a>
+          {% if current_user.isAdmin %} 
+       
+          <a href="/delete/{{tk.task_no}}"
+          ><i
+            class="fa-regular fa-trash-can"
+            style="color: #ff0f0f; margin: 0 5px"
+          ></i
+        ></a>
+        {% endif %}
+         
+        </td>
+      </tr>
+
+      {%endfor %}
+    </tbody>
+  </table> -->
+    </div>
+  </div>
+  
+</div>
+{% endblock %}
