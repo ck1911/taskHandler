@@ -48,12 +48,12 @@
 
             <td>
              
-                {{tk.user_data.name}}
+                {{tk.assigned_to.name}}
               
             </td>
             <td>
-              <a class="text-current" href="mailto:{{tk.user_data.email}}"
-                >{{tk.user_data.email}}</a
+              <a class="text-current" href="mailto:{{tk.assigned_to.email}}"
+                >{{tk.assigned_to.email}}</a
               >
             </td>
             {% endif %}
@@ -114,7 +114,6 @@
         <td>{{tk.task}}</td>
         {% if current_user.isAdmin %} 
        
-        <td>{{tk.user_data.name}}</td>
         {% endif %}
         <td>{{tk.due_date.date().strftime("%d-%m-%Y")}}</td>
         <td>{{tk.status}}</td>

@@ -120,10 +120,10 @@ def signup():
 @app.route("/")
 def list_tasks():
     if current_user.is_authenticated:
-        # if current_user.is_admin(): 
-        #     task=Task.query.all()
-        # else:
-        task=Task.query.filter_by(user_id=current_user.get_id())
+        if current_user.is_admin(): 
+            task=Task.query.filter_by(manager_id=current_user.get_id())
+        else:
+            task=Task.query.filter_by(user_id=current_user.get_id())
         return render_template("list.html",tsk=task)
     else:
         return redirect("/login")
