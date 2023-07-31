@@ -52,11 +52,18 @@ class Task(db.Model):
     status=db.Column(db.String,default="In-Progress",nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
     manager_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
+    
     assigned_to=db.relationship("User",foreign_keys="Task.user_id")
     assigned_by=db.relationship("User",foreign_keys="Task.manager_id")
     
+    new_due_date=db.Column(db.DateTime)
+    
+    
+    
     def __repr__(self):
         return 'Task Number - {0} || Task Name - {1}'.format(self.task_no,self.task)
+    
+
 
     
     
@@ -156,6 +163,19 @@ def edit_task(no):
         db.session.commit()
         return redirect("/")
     return render_template("edit.html",tsk=tsk)
+
+@app.route("/edit/deadline/<int:no>",methods=["GET","POST"])
+@login_required
+def update_deadline_task(no):
+    tsk=Task.query.get(no)
+    if request.method == "POST":
+        form=request.form
+        new_due_date=datetime.fromisoformat(form.get("due_date"))
+        dr=DeadlineRequest(new_due_date=new_due_date,task_id=no)
+        db.session.add(dr)
+        db.session.commit()
+        return redirect("/")
+    return render_template("deadlineReq.html",tsk=tsk)
 
 @app.route("/delete/<int:no>")
 @login_required
