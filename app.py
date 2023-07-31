@@ -28,7 +28,6 @@ class User(db.Model):
     active=db.Column(db.Boolean,default=True)
     anonymous=db.Column(db.Boolean,default=False)
     isAdmin=db.Column(db.Boolean,default=False)
-    tasks = db.relationship('Task', backref='user_data', lazy=True)
     
     def is_authenticated(self):
         return self.authenticated
@@ -41,6 +40,7 @@ class User(db.Model):
     
     def is_admin(self):
         return bool(self.isAdmin)
+    
     def __repr__(self):
         return 'User Number - {0} || User Name - {1}'.format(self.user_no,self.name)
     
@@ -51,9 +51,9 @@ class Task(db.Model):
     due_date=db.Column(db.DateTime)
     status=db.Column(db.String,default="In-Progress",nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
-    # manager_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
-    # assigned_to=db.relationship("User",foreign_keys="Task.user_id")
-    # assigned_by=db.relationship("User",foreign_keys="Task.manager_id")
+    manager_id = db.Column(db.Integer,db.ForeignKey('user.user_no'),nullable=False)
+    assigned_to=db.relationship("User",foreign_keys="Task.user_id")
+    assigned_by=db.relationship("User",foreign_keys="Task.manager_id")
     
     def __repr__(self):
         return 'Task Number - {0} || Task Name - {1}'.format(self.task_no,self.task)
@@ -120,10 +120,10 @@ def signup():
 @app.route("/")
 def list_tasks():
     if current_user.is_authenticated:
-        if current_user.is_admin(): 
-            task=Task.query.all()
-        else:
-            task=Task.query.filter_by(user_id=current_user.get_id())
+        # if current_user.is_admin(): 
+        #     task=Task.query.all()
+        # else:
+        task=Task.query.filter_by(user_id=current_user.get_id())
         return render_template("list.html",tsk=task)
     else:
         return redirect("/login")
@@ -136,7 +136,7 @@ def create_task():
         form=request.form
         date=datetime.fromisoformat(form.get("due_date"))
         user=User.query.get_or_404(int(form.get("user_id")))
-        tsk=Task(task=form.get("task_name"),due_date=date,user_id=user.user_no)
+        tsk=Task(task=form.get("task_name"),due_date=date,user_id=user.user_no,manager_id=current_user.get_id())
         db.session.add(tsk)
         db.session.commit()
         return redirect("/")
